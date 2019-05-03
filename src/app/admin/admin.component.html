@@ -1,0 +1,17 @@
+<div class="ui container">
+  <br/>
+  <h1>Bestellverwaltung</h1>
+  <br/><br/>
+  <div *ngFor="let order of orders">
+    <div class="ui middle aligned selection divided list">
+      <a class="item" [routerLink]="order.id">
+        <p><b>Kundennummer: </b> {{order.user_id}}</p>
+        <p><b>Bestellung vom:</b> {{order.date | date}}</p>
+        <div *ngFor="let status of order.stati last as l" >
+          <p *ngIf="l"><b>Bestellstatus:</b> {{status.status}}</p>
+        </div>
+      </a>
+  </div>
+  <hr>
+
+</div>

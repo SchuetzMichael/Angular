@@ -1,0 +1,15 @@
+<img class="ui tiny image"
+     *ngIf="book?.images"
+     [src]="book?.images[0]?.url">
+<div class="content">
+  <div class="header">{{book.title}}</div>
+  <div class="description">{{book.subtitle}}</div>
+  <div class="metadata">
+      <span *ngFor="let author of book.authors; last as l">
+        {{author.firstName}} {{author.lastName}}
+        <span *ngIf="!l">,</span>
+      </span>
+  </div>
+  <div class="extra">ISBN: {{book.isbn}}</div>
+  <div class="price">Preis: {{changeToComma(book.price)}} €</div>
+</div>

@@ -1,0 +1,49 @@
+<div class="ui container" *ngIf="order">
+  <br/>
+  <h1>Bestellung - Details</h1>
+  <br/><br/>
+  <div class="ui grid">
+    <div class="six wide column">
+      <p>Kunde {{order.user_id}}</p>
+      <p><b>Name: </b>{{order.user.firstname}} {{order.user.lastname}}</p>
+      <p>Bestellung vom {{order.date | date}}</p>
+      <p><b>Gesamtsumme:</b> {{order.total_brutto}} €</p>
+      <p><b>Bücher: </b></p>
+      <ul>
+        <div *ngFor="let book of order.books">
+          <li>{{book.title}} (Menge: {{book.pivot.quantity}})</li>
+        </div>
+      </ul>
+      <p><b>Lieferadresse: </b></p>
+      <p>{{order.user.street}} {{order.user.street_number}}, {{order.user.zip_code}} {{order.user.city}}  {{order.user.country}}</p>
+    </div>
+    <div class="eight wide column">
+      <div *ngFor="let status of order.stati last as l" >
+        <span>Status <b>"{{status.status}}"</b> vergeben am: <b>{{status.updated_at | date}}</b></span><br/>
+        <span *ngIf="status.comment != NULL" >Kommentar: {{status.comment}}</span>
+        <br/><br/>
+        <h3 *ngIf="l">Aktueller Status: {{status.status}}</h3>
+      </div>
+      <br/>
+      <p><b>Neuer Status:</b></p>
+      <select (input)="selectedStatus=$event.target.value" class="form-control">
+        <option value="Offen">Offen</option>
+        <option value="Bezahlt">Bezahlt</option>
+        <option value="Versendet">Versendet</option>
+        <option value="Stoniert">Storniert</option>
+      </select>
+      <br/><br/>
+      <p><b>Kommentar:</b></p>
+      <textarea (input)="comment=$event.target.value" type="textarea" class="form-control" rows="4" cols="46"></textarea>
+      <br/><br/>
+      <button class="ui red button"  type="submit" (click)="saveStatus()">
+        Speichern
+      </button>
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <button [routerLink]="'/admin'" class="ui yellow button">
+    Zurück zur Übersicht
+  </button>
+</div>
