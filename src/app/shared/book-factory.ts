@@ -1,4 +1,3 @@
-//Hilfsklasse
 
 import { Book } from './book';
 

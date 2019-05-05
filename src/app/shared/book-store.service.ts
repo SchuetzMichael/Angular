@@ -3,11 +3,9 @@ import {Author, Book, Image} from './book';
 import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
-import {Item} from './item';
 import {Order} from './order';
 import {Status} from './status';
 
-//nicht vergessen - jedes Service in app.module.ts im providers eintragen
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +17,17 @@ export class BookStoreService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(): Observable<Array<Book>>{ //kommt ein Array von Bücher zurück
+  getAll(): Observable<Array<Book>>{
     return this.http.get(`${this.api}/books`).pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
+  getAllAuthors(): Observable<Array<Author>>{
+    return this.http.get(`${this.api}/authors`).pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
+  getAuthor(id): Observable<Author>{
+    return this.http.get(`${this.api}/author/${id}`).pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
   getSingle(isbn): Observable<Book>{
     return this.http.get(`${this.api}/book/${isbn}`).pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
@@ -41,6 +46,10 @@ export class BookStoreService {
 
   getAllSearch(searchTerm: string): Observable<Array<Book>>{
     return this.http.get(`${this.api}/book/search/${searchTerm}`).pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
+  getAllSearchAuthor(searchTerm: string): Observable<Array<Author>>{
+    return this.http.get(`${this.api}/author/search/${searchTerm}`).pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
   saveToCart(order:Order): Observable<any>{

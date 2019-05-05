@@ -13,8 +13,8 @@ export class OrderFactory {
       rawOrder.user_id,
       typeof(rawOrder.date) === 'string' ?
         new Date(rawOrder.date) : rawOrder.date,
-      rawOrder.total_brutto,
-      rawOrder.total_netto,
+      rawOrder.price_brutto,
+      rawOrder.price_netto,
       rawOrder.status,
       rawOrder.user
     );

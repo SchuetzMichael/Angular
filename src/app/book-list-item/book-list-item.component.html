@@ -6,7 +6,7 @@
   <div class="description">{{book.subtitle}}</div>
   <div class="metadata">
       <span *ngFor="let author of book.authors; last as l">
-        {{author.firstName}} {{author.lastName}}
+        {{author.firstname}} {{author.lastname}}
         <span *ngIf="!l">,</span>
       </span>
   </div>

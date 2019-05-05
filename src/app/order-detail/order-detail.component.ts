@@ -15,7 +15,7 @@ export class OrderDetailComponent implements OnInit {
 
   ngOnInit() {
     const params = this.route.snapshot.params;
-    this.bs.getSingleOrder(params['order_id']).subscribe(res => {this.order = res; console.log(this.order);});
+    this.bs.getSingleOrder(params['order_id']).subscribe(res => {this.order = res});
   }
 
 }

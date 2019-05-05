@@ -1,11 +1,11 @@
 import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
 
 import {BookFormErrorMessages} from './book-form-error-messages';
 import {BookFactory} from '../shared/book-factory';
 import {BookStoreService} from '../shared/book-store.service';
-import {Book, Image} from '../shared/book';
+import {Book, Image, Author} from '../shared/book';
 import {BookValidators} from '../shared/book-validators';
 
 @Component({
@@ -18,18 +18,19 @@ export class BookFormComponent implements OnInit {
   errors: { [key: string]: string } = {};
   isUpdatingBook = false;
   images: FormArray;
+  //authors: FormArray;
 
   constructor(private fb: FormBuilder, private bs: BookStoreService,
               private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
-    const isbn = this.route.snapshot.params['isbn']; //hat die Route von der ich komme eine isbn?
+    const isbn = this.route.snapshot.params['isbn'];
     if (isbn) {
-      this.isUpdatingBook = true; //wenn ja dann in der updateRoute
-      this.bs.getSingle(isbn).subscribe(book => { //hole mir von REST service das entsprechende Buch
+      this.isUpdatingBook = true;
+      this.bs.getSingle(isbn).subscribe(book => {
         this.book = book;
-        this.initBook(); //brauch ich auch hier, weil das subscribe ein asynchroner Aufruf ist
+        this.initBook();
       });
     }
     this.initBook();
@@ -37,6 +38,7 @@ export class BookFormComponent implements OnInit {
 
   initBook() {
     this.buildThumbnailsArray();
+    //this.buildAuthorsArray();
 
     this.bookForm = this.fb.group({
       id: this.book.id,
@@ -61,9 +63,7 @@ export class BookFormComponent implements OnInit {
 
   buildThumbnailsArray() {
     console.log(this.book.images);
-    // if(this.book.images.length == 0){ //if new book had no images -> but no in edit mode
-    //   this.book.images.push(new Image(0,'',''))
-    // }
+
     this.images = this.fb.array(
       this.book.images.map(
         t => this.fb.group({
@@ -76,36 +76,56 @@ export class BookFormComponent implements OnInit {
     console.log(this.images);
   }
 
+  /*buildAuthorsArray() {
+    console.log(this.book.authors);
+
+    this.authors = this.fb.array(
+      this.book.authors.map(
+        a => this.fb.group({
+          id: this.fb.control(a.id),
+          firstname: this.fb.control(a.firstname),
+          lastname: this.fb.control(a.lastname)
+        })
+      )
+    );
+    console.log(this.authors);
+  }*/
+
   addThumbnailControl() {
     this.images.push(this.fb.group({url: null, title: null}));
   }
+
+  /*addAuthor() {
+    this.authors.push(this.fb.group({firstname: null, lastname: null}));
+  }*/
 
   removeThumbnailControl(index) {
     this.images.removeAt(index);
   }
 
+  /*removeAuthor(index) {
+    this.authors.removeAt(index);
+  }*/
+
   submitForm() {
-    // filter empty values
     this.bookForm.value.images = this.bookForm.value.images.filter(thumbnail => thumbnail.url);
+    //this.bookForm.value.authors = this.bookForm.value.authors.filter(thumbnail => thumbnail.firstname);
 
-    const book: Book = BookFactory.fromObject(this.bookForm.value); //konvertiere ich ein Buch Objekt durch BookFactory
-    //deep copy  - did not work without??
-    book.images = this.bookForm.value.images; //dem Buch Objekt die Images zugewiesen
+    const book: Book = BookFactory.fromObject(this.bookForm.value);
+
+    book.images = this.bookForm.value.images;
+    //book.authors = this.bookForm.value.authors;
+
     console.log(book);
-
-    //just copy the authors
-    book.authors = this.book.authors;
 
     if (this.isUpdatingBook) {
       this.bs.update(book).subscribe(res => {
         this.router.navigate(['../../books', book.isbn], {relativeTo: this.route});
       });
     } else {
-      book.user_id = 1;// just for testing
+      book.user_id = 1;
       console.log(book);
       this.bs.create(book).subscribe(res => {
-        // this.book = BookFactory.empty();
-        // this.bookForm.reset(BookFactory.empty());
         this.router.navigate(['../books'], {relativeTo: this.route});
       });
     }
@@ -116,8 +136,8 @@ export class BookFormComponent implements OnInit {
     for (const message of BookFormErrorMessages) {
       const control = this.bookForm.get(message.forControl);
       if (control &&
-        control.dirty && //wenn der User schon damit interagiert hat aber noch keinen korrekten zustand hat
-        control.invalid && //wenn es invalider zustand ist
+        control.dirty &&
+        control.invalid &&
         control.errors[message.forValidator] &&
         !this.errors[message.forControl]) {
         this.errors[message.forControl] = message.text;

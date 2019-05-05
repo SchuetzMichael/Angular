@@ -6,9 +6,10 @@
            *ngIf="item.book?.images"
            [src]="item.book?.images[0]?.url">
     </div>
-    <div class="content four wide column">
-      <div class="header">{{item.book.title}}</div>
+    <div class="four wide column">
+      <div class="header"><b>{{item.book.title}}</b></div><br/>
       <div class="description">{{item.book.subtitle}}</div>
+      <hr/>
       <div class="price">Preis pro Stück: {{item.book.price}} €</div>
     </div>
     <div class="four wide column">
@@ -36,9 +37,7 @@
   <hr>
   <br/>
   <div class="ui middle aligned selection divided list">
-    <div class="five wide column">Nettopreis:</div> <div class="two wide column">{{total_netto.toFixed(2)}} €</div>
-    <div class="five wide column">Mwst.: </div> <div class="two wide column"> {{mwst.toFixed(2)}} € </div>
-    <div class="five wide column"><b>Gesamtpreis: </b></div> <div class="two wide column"><b> {{total_brutto.toFixed(2)}} €</b></div>
+    <div class="five wide column"><b>Gesamtpreis: </b></div> <div class="two wide column"><b> {{price_brutto.toFixed(2)}} €</b></div>
   </div>
   <button class="ui red button"  type="submit" (click)="submitOrder()">
     Bücher bestellen

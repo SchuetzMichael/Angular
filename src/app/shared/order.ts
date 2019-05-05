@@ -7,8 +7,8 @@ export class Order {
               public items: Item[],
               public user_id: number,
               public date: Date,
-              public total_brutto: number,
-              public total_netto: number,
+              public price_brutto: number,
+              public price_netto: number,
               public status: Status[],
               public user: User[] ){
   }

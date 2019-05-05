@@ -1,45 +1,48 @@
 <div class="ui container" *ngIf="order">
   <br/>
-  <h1>Bestellung - Details</h1>
-  <br/>
+  <h1>Bestellung {{order.id}}</h1>
   <div class="ui grid">
     <div class="five wide column">
       <p>Bestellung vom {{order.date | date}}</p>
+      <p><b>Gesamtsumme:</b> {{order.price_brutto}} €</p>
+      <p *ngIf="order.status?.length == 0"><b>Aktueller Status:</b> Offen</p>
+      <div *ngFor="let status of order.status last as l" >
+        <p *ngIf="l"><b>Aktueller Status:</b> {{status.status}}</p>
+      </div>
     </div>
     <div class="six wide column">
-      <p><b>Lieferadresse:</b> {{order.user.street}} {{order.user.street_number}}, {{order.user.zip_code}} {{order.user.city}}/{{order.user.country}}</p>
-    </div>
-    <div class="four wide column">
-      <p><b>Gesamtsumme:</b> {{order.total_brutto}} €</p>
+      <h4>Bestellverlauf</h4>
+      <p *ngIf="order.status?.length == 0"><b>Aktueller Status:</b> Offen</p>
+      <div *ngFor="let status of order.status last as l" >
+        <span>Bestellung <b>{{status.status}}</b> am: <b>{{status.updated_at | date}}</b></span><br/>
+      </div>
     </div>
   </div>
   <br/>
-  <hr>
-  <br/>
+  <hr/>
   <div class="ui grid">
     <div class="five wide column">
-      <h3>Bücher:</h3>
+      <h2>Bestellte Bücher</h2>
       <div *ngFor="let book of order.books">
-        <span><b>{{book.title}} </b></span><br/>
-        <span>{{book.subtitle}} </span><br/>
-        <span>Preis: {{book.price}} € (inkl. Mwst.)</span><br/>
-        <span>Menge: {{book.pivot.quantity}}</span>
-        <br/><br/>
-      </div>
-    </div>
-    <div class="six wide column">
-      <h3 *ngIf="order.stati?.length == 0">Aktueller Status: In Warteschlange</h3>
-      <div *ngFor="let status of order.stati last as l" >
-        <span>Status <b>"{{status.status}}"</b> vom: <b>{{status.updated_at | date}}</b></span><br/>
-        <span *ngIf="status.comment != NULL" >Kommentar: {{status.comment}}</span>
-        <br/><br/>
-        <h3 *ngIf="l">Aktueller Status: {{status.status}}</h3>
+        <h3>{{book.title}} </h3>
+        <p><i>{{book.subtitle}}</i> </p>
+        <p><b>Menge:</b> {{book.pivot.quantity}}</p>
+        <p><b>Preis:</b> {{book.price.toFixed(2)}} € (inkl. Mwst.)</p>
       </div>
     </div>
   </div>
-  <br/>
-  <br/>
-  <button [routerLink]="'/orders'" class="ui yellow button">
+  <hr/>
+  <div class="ui grid">
+    <div class="six wide column">
+      <h2>Lieferadresse</h2>
+      <p>{{order.user.firstname}} {{order.user.lastname}}</p>
+      <p>{{order.user.street}} {{order.user.street_number}}</p>
+      <p>{{order.user.plz}} {{order.user.city}}</p>
+      <p>{{order.user.country}}</p>
+    </div>
+  </div>
+  <br/><br/>
+  <button [routerLink]="'/orders'" class="ui mini yellow button">
     Zurück zur Übersicht
   </button>
 </div>

@@ -5,7 +5,6 @@
   </div>
   <div class="results transition" [ngClass]="{ visible: foundBooks.length }">
 
-    <!--wenn ich auf ein Buch klicke, dann soll ein event geworfen werden-->
     <a href (click)="bookSelected.emit(book); false" class="result" *ngFor="let book of foundBooks">
       <div class="content">
         <div class="title" >{{ book.title }}</div>

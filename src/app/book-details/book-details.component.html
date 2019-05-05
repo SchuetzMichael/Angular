@@ -11,7 +11,7 @@
       <div class="five wide column">
         <h4 class="ui header">Autoren</h4>
         <span *ngFor="let author of book.authors; last as l">
-         {{ author.firstName }} {{ author.lastName }}<span *ngIf="!l">, </span>
+         {{ author.firstname }} {{ author.lastname }}<span *ngIf="!l">, </span>
        </span>
       </div>
       <div class="five wide column">
@@ -48,8 +48,7 @@
   Zurück zur Buchliste
 </button>
 
-<a *ngIf="authService.isLoggedIn() && !authService.isLoggedInAdmin()" class="ui red button"
-   [routerLink]="['../../cart', book?.isbn]">
+<a *ngIf="!authService.isLoggedInAdmin()"class="ui red button" [routerLink]="['../../cart', book?.isbn]">
   Zum Warenkorb hinzufügen
 </a>
 

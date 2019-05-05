@@ -14,6 +14,6 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     let user_id = localStorage.getItem('userId');
-    this.bs.getAllOrdersByUser(user_id).subscribe(res => {console.log(res); this.orders = res});
+    this.bs.getAllOrdersByUser(user_id).subscribe(res => {this.orders = res});
   }
 }

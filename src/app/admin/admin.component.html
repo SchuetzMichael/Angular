@@ -5,9 +5,10 @@
   <div *ngFor="let order of orders">
     <div class="ui middle aligned selection divided list">
       <a class="item" [routerLink]="order.id">
-        <p><b>Kundennummer: </b> {{order.user_id}}</p>
-        <p><b>Bestellung vom:</b> {{order.date | date}}</p>
-        <div *ngFor="let status of order.stati last as l" >
+        <p><b>Kunde: </b>{{order.user.firstname}} {{order.user.lastname}}<b> (Knr: {{order.user_id}})</b></p>
+        <p><b>Bestellung vom:</b> {{order.date}}</p>
+        <p><b>Gesamtpreis: </b>{{order.price_brutto.toFixed(2)}} €</p>
+        <div *ngFor="let status of order.status last as l" >
           <p *ngIf="l"><b>Bestellstatus:</b> {{status.status}}</p>
         </div>
       </a>

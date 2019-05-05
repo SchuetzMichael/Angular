@@ -5,10 +5,10 @@
   <div *ngFor="let order of orders">
     <div class="ui middle aligned selection divided list">
       <a class="item" [routerLink]="order.id">
-      <p><b>Bestellung vom:</b> {{order.date | date}}</p>
-        <p><b>Anzahl der Bücher: </b>{{order.quantity}}</p>
-        <p><b>Preis: </b>{{order.total_brutto.toFixed(2)}} €</p>
-        <div *ngFor="let status of order.stati last as l" >
+      <p><b>Bestellung vom:</b> {{order.date}}</p>
+        <p><b>Preis: </b>{{order.price_brutto.toFixed(2)}} €</p>
+        <p *ngIf="order.status?.length == 0"><b>Aktueller Status:</b> Offen</p>
+        <div *ngFor="let status of order.status last as l" >
           <p *ngIf="l"><b>Aktueller Status:</b> {{status.status}}</p>
         </div>
       </a>
